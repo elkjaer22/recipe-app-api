@@ -1,7 +1,7 @@
 FROM python:3.9-alpine3.13
 LABEL maintaner="elkja"
 
-ENV PYTHONBUFFERED 1
+ENV PYTHONUNBUFFERED 1
 
 COPY ./requirements.txt /tmp/requirements.txt
 COPY ./requirements.dev.txt /tmp/requirements.dev.txt
@@ -21,7 +21,11 @@ RUN python -m venv /py && \
         --disabled-password \
         --no-create-home \
         django-user && \
+    addgroup django-dev && \
+    chown :django-dev /app && \
+    adduser django-user django-dev
+
 
 ENV PATH="/py/bin:$PATH"
 
-USER django-user
+USER django-user   
